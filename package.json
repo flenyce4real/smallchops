@@ -1,0 +1,21 @@
+{
+  "name": "smallchops",
+  "version": "1.0.0",
+  "description": "API for online Smallchops sales point",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flenyce4real/smallchops.git"
+  },
+  "author": "Olawale Aro",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.20"
+  }
+}
