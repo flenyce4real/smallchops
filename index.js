@@ -69,19 +69,31 @@ app.get('/customers', (req, res) => {
 })
 
 app.post('/customer', (req, res) => {
-    const {firstname, lastname, phone, email} = req.body
+    const { firstname, lastname, phone, email } = req.body
 
-    if(!firstname || !lastname || !occupation || !email){
+    if(!firstname || !lastname || !phone || !email) {
         return res.status(400)
         .json(
             {message: "Please fill all fields"} )
     } else {
         
-
-
-        res.status(201).json({
-            message: "Customer created successfully",
-            data: newUser
+        connection.query(`SELECT * from customers where email='${email}' or phone='${phone}'`, 
+            (error, results, fields) => {
+            if(error){
+                res.status(500).json( { message: 'An error occured' } )
+            }else if(results.length > 0) {
+                res.status(400).json( { message: 'Email or phone already exists' } )
+            }else{
+                let customer_id = uuidv4()
+                connection.query(`INSERT INTO customers (customer_id, firstname, lastname, phone, email) 
+                              VALUES ('${customer_id}','${firstname}', '${lastname}', '${phone}', '${email}')`),
+                (error, results, fields) => {
+                    if (error){
+                        res.status(500).json( { message: 'An error occured' } )
+                    }
+                    res.status(201).json( { message: 'Customer created' } )
+                }
+            }
         })
     }
 })
