@@ -1,9 +1,21 @@
+require('dotenv').config()
 const express = require('express')
+const mysql = require('mysql')
+const bodyParser = require('body-parser');
 const app = express()
 const port = 3000
 
-const bodyParser = require('body-parser');
 app.use(bodyParser.json())
+
+const connection = mysql.createConnection({
+    host: process.env.DATABASE_HOST,
+    user: process.env.DATABASE_USER,
+    port: process.env.DATABASE_PORT,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME
+})
+
+connection.connect()
 
 app.listen(port, () => {
     console.log(`The server is running on port ${port}`);
@@ -81,4 +93,12 @@ app.post('/customer', (req, res) => {
             data: newUser
         })
     }
+})
+
+app.delete('/customer/delete/:userid', (req, res) => {
+    let {userid} = req.params
+    res.status(201).send({
+        message: `Customer ${userid} deleted!`,
+        data: users
+    })
 })
