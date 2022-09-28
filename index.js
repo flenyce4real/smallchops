@@ -8,6 +8,10 @@ const port = 3000
 
 app.use(bodyParser.json())
 
+app.listen(port, () => {
+    console.log(`The server is running on port ${port}`);
+})
+
 const connection = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
@@ -17,10 +21,6 @@ const connection = mysql.createConnection({
 })
 
 connection.connect()
-
-app.listen(port, () => {
-    console.log(`The server is running on port ${port}`);
-})
 
 const users = [
     {
@@ -69,27 +69,17 @@ app.get('/customers', (req, res) => {
 })
 
 app.post('/customer', (req, res) => {
-    const fname = req.body.firstname
-    const lname = req.body.lastname
-    const work = req.body.occupation
-    const age = req.body.age
+    const {firstname, lastname, phone, email} = req.body
 
-    if(!fname || !lname || !work || !age){
-        res.status(400).send({
-            message: "Please fill all fields"
-        })
+    if(!firstname || !lastname || !occupation || !email){
+        return res.status(400)
+        .json(
+            {message: "Please fill all fields"} )
     } else {
-        const newUser = {
-            id: users.length + 1,
-            firstname: fname,
-            lastname: lname,
-            occupation: work,
-            age: age
-        }
+        
 
-        users.push(newUser)
 
-        res.status(201).send({
+        res.status(201).json({
             message: "Customer created successfully",
             data: newUser
         })
